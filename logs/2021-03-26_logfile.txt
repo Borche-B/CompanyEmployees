@@ -1,0 +1,4 @@
+2021-03-26 11:34:59.2118 INFO Info message from our controller.
+2021-03-26 11:34:59.2974 DEBUG Debug message from our controller.
+2021-03-26 11:34:59.3157 WARN Warn message from our controller.
+2021-03-26 11:34:59.3317 ERROR Error message from our controller.
