@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts;
+using Entities.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,18 +16,31 @@ namespace CompanyEmployees.Controllers
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
+        private readonly IMapper _mapper;
 
-        public CompaniesController(IRepositoryManager repositoryManager, ILoggerManager loggerManager)
+        public CompaniesController(IRepositoryManager repositoryManager, ILoggerManager loggerManager, IMapper mapper)
         {
             _repository = repositoryManager;
             _logger = loggerManager;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetCompanies()
         {
-            var companies = _repository.Company.GetAllCompanies(false);
-            return Ok(companies);
+
+            try
+            {
+                var companies = _repository.Company.GetAllCompanies(false);
+                var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+
+                return Ok(companiesDto);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetCompanies)} action {ex}");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
