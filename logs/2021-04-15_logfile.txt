@@ -1,0 +1,1 @@
+2021-04-15 13:10:16.0190 INFO Company with id: 0ad5b971-ff51-414d-af01-34187e407557 doesn't exist in the database.
