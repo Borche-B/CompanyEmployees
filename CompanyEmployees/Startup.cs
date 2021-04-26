@@ -41,6 +41,8 @@ namespace CompanyEmployees
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+            services.AddAuthentication();
+            services.ConfigureIdentity();
             
             services.AddControllers();
         }
@@ -68,12 +70,16 @@ namespace CompanyEmployees
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            
+            
         }
     }
 }
