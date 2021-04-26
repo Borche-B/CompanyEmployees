@@ -17,13 +17,13 @@ namespace CompanyEmployees.Controllers
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-       // private readonly IAuthenticationManager _authManager;
-        public AuthenticationController(ILoggerManager logger, IMapper mapper, UserManager<User> userManager)
+        private readonly IAuthenticationManager _authManager;
+        public AuthenticationController(ILoggerManager logger, IMapper mapper, UserManager<User> userManager, IAuthenticationManager authManager)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
-            //_authManager = authManager;
+            _authManager = authManager;
         }
 
         [HttpPost]
@@ -56,17 +56,16 @@ namespace CompanyEmployees.Controllers
             return StatusCode(201);
         }
 
-        //[HttpPost("login")]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        //public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
-        //{
-        //    if (!await _authManager.ValidateUser(user))
-        //    {
-        //        _logger.LogWarn($"{nameof(Authenticate)}: Authentication failed. Wrong user name or password.");
-        //        return Unauthorized();
-        //    }
+        [HttpPost("login")]
+        public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
+        {
+            if (!await _authManager.ValidateUser(user))
+            {
+                _logger.LogWarn($"{nameof(Authenticate)}: Authentication failed. Wrong user name or password.");
+                return Unauthorized();
+            }
 
-        //    return Ok(new { Token = await _authManager.CreateToken() });
-        //}
+            return Ok(new { Token = await _authManager.CreateToken() });
+        }
     }
 }
